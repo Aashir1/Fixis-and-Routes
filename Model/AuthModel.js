@@ -36,7 +36,7 @@ var saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const key = "fixs-and-routes";
 class UserClass {
-    static signUpUser(obj, res) {
+    static signUpUser(obj, res, next) {
         console.log(obj)
         // let error = new Error("this is error")
         // error.status = 405;
@@ -54,18 +54,47 @@ class UserClass {
 
             const messageArray = Object.keys(validationResult.errors).map(i => validationResult.errors[i]["message"])
 
-            throwError(messageArray)
+            throwError(messageArray, 422, next)
+            // let errorObj = new Error()
+            // errorObj.message = messageArray;
+            // next(errorObj)
         }
         bcrypt.hash(obj.pass, saltRounds, (err, hash) => {
 
             let user = new User({ name: obj.name, email: obj.email, pass: hash });
 
 
-            ResolvePromise(user.save(), res)
+            ResolvePromise(user.save(), res, next)
+        })
+    }
+    static signInUser(obj, res, next) {
+        User.find({ email: obj.email }).then(value => {
+            
+            bcrypt.compare(obj.pass, value[0] && value[0].pass, (err, bcryptRes) => {
+                if (bcryptRes) {
+
+                    let user = value[0];
+
+                    jwt.sign({ name: value[0].name, email: value[0].email }, key, (err, token) => {
+                        if (!err)
+                            res.json({
+                                status: "success",
+                                token,
+                                user: { name: value[0].name, email: value[0].email }
+                            });
+                        else
+                            throw err
+                    });
+                } else {
+                    throwError("invalid email or password", 400, next)
+                }
+            })
+        }).catch(err => {
+            console.log("email find catch", err)
         })
     }
 }
-function ResolvePromise(dbOperator, res) {
+function ResolvePromise(dbOperator, res, next) {
     dbOperator.then(value => {
 
         let user = { ...value._doc };
@@ -85,15 +114,27 @@ function ResolvePromise(dbOperator, res) {
         });
         // res.json(value)
     }).catch(err => {
+        console.log("in catch", err);
+        if (11000 === err.code) {
+            var MongooseError = require('mongoose/lib/error')
+            var valError = new MongooseError.ValidationError(err)
+            // valError.errors["message"] = new MongooseError.ValidatorError('message', 'Duplicate found', err.err)
+            valError["message"] = "name already taken";
+            valError["status"] = 409;
+            err = valError
+            console.log("valError", valError)
+
+            throwError(err.message,err.status,next)
+        }
 
 
-        throw err;
+        // throw err;
     })
 }
-function throwError(message) {
+function throwError(message, status, next) {
     let err = new Error();
-    err.status = 409;
+    err.status = status;
     err.message = message;
-    throw err;
+    next(err);
 }
 module.exports = UserClass
