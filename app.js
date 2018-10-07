@@ -3,14 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose');
-var mongodbUrl = 'mongodb://<name>:<password>@ds125381.mlab.com:25381/server';
-mongoose.connect(mongodbUrl)
-mongoose.connection.once('open', () => {
-  console.log('connection is establised: ');
-}).on('error', () => {
-  console.log('error occured');
-});
+
 // .then(() => {
 //   console.log('connection is established');
 // }).catch(() => {
