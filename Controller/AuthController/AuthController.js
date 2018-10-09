@@ -2,58 +2,94 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const UserModel = require('../../Models/AuthModels/UserModel');
-const salt = 20;
 var mongoose = require('mongoose');
-const secret = 'INSPIRON15R';
-// var mongodbUrl = 'mongodb://<name>:<password>@ds125381.mlab.com:25381/server';
-var mongodbUrl = 'mongodb://localhost:27017/fixis'
-mongoose.connect(mongodbUrl)
-mongoose.connection
-    .once('open', () => {
-        console.log('connection is establised: ');
-    }).on('error', () => {
-        console.log('error occured');
-    });
 
+const salt = 20;
+const secret = 'INSPIRON15R';
 
 class AuthController {
     static signUp(req, res) {
         let { email, password } = req.body;
-        if (validator.isEmail(req.body.email)) {
+        if (validator.isEmail(email)) {
             let userDocument = new UserModel(req.body);
-            userDocument.password = bcrypt.hashSync(userDocument.password, salt)
+            // userDocument.password = bcrypt.hashSync(userDocument.password, salt);
             userDocument.save((err, user) => {
                 if (!err) {
                     delete user.password;
-                    return sendResponse(res, user);
+                    return AuthController.sendResponse(res, user);
                 }
-                return this.throwError(res, err.message, 400);
+                if (err.code == 11000) {
+                    let error = {
+                        code: err.code,
+                        message: err.message
+                    }
+                    return AuthController.throwError(res, error, 400);
+                }
             })
-        } else {
-            throwError(res, 'Email badly formated', 422);
-        }
+            // console.log("run till there 1");
+            // bcrypt.hash(userDocument.password, salt, (err, hash) => {
+            //     console.log("run till there 3");
+            //     if (!err) {
+            //         userDocument.password = hash;
+            //         console.log('userDocument.password: ', userDocument.password)
+            //         console.log("userDocument: ", userDocument);
+            //         console.log('userDOcument: ', userDocument);
+            //     }
+            // });
+            // console.log("run till there 2");
 
+        } else {
+            AuthController.throwError(res, { message: 'Email badly formated' }, 422);
+        }
     }
 
-    sendResponse(res, user) {
-        jwt.sign(user, secret, (err, token) => {
+    static signIn(req, res, next) {
+        let { email, password } = req.body;
+        if (validator.isEmail(email)) {
+            UserModel.findOne({ email }, (err, user) => {
+                if (err === null && user === null) {
+                    return AuthController.throwError(res, { message: `No user corresponding to the email ${email}` }, 404)
+                }
+                if (!err) {
+                    if (true || bcrypt.compareSync(password, user.password)) {
+                        delete user.password;
+                        return AuthController.sendResponse(res, user);
+                    } else {
+                        return AuthController.throwError(res, { message: `Wrong password` }, 400)
+                    }
+                } else {
+                    return AuthController.throwError(res, { message: `No user corresponding to the email ${email}` }, 404)
+                }
+            })
+        } else {
+            return AuthController.throwError(res, { message: 'Email or password badly formated' }, 400);
+        }
+    }
+
+    static sendResponse(res, user) {
+        let userObj = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            name: user.name,
+            email: user.email,
+            id: user._id,
+            createdAt: user.createdAt
+        }
+        jwt.sign(userObj, secret, (err, token) => {
             if (!err) {
                 return res.json({
-                    user,
+                    user: userObj,
                     status: 'success',
                     token
                 })
             }
-            return this.throwError(res, err.message, 400);///////////////tesst ans start working on sign in
+            return this.throwError(res, { message: err.message }, 400);///////////////tesst ans start working on sign in
         })
     }
 
-    throwError(res, message, statusCode = undefined) {
-        if (statusCode) {
-            return res.status(statusCode).json({ message })
-        }
-        return res.json(message);
-
+    static throwError(res, errObj, statusCode = 400) {
+        errObj.status = statusCode;
+        return res.status(statusCode).json({ error: errObj })
     }
 }
 
