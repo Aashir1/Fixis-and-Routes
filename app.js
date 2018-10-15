@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
+// var insertData = require("./Model/RouteInsertModel")();
 app.use("/", authRouter);
 
 // catch 404 and forward to error handler
