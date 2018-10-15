@@ -89,6 +89,8 @@ class UserClass {
 
     }
 }
+
+
 function ResolvePromise(dbOperator, res, next) {
     dbOperator.then(value => {
 
