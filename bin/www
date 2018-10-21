@@ -24,10 +24,12 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
+var io = app.io;
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+io.attach(server);
+
 
 /**
  * Normalize a port into a number, string, or false.

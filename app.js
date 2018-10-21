@@ -3,12 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var socketio = require('socket.io');
 
 
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 
 var authRouter = require("./routes/Auth");
+var busRoute = require("./routes/BusRoute");
 
 var app = express();
 
@@ -25,7 +27,13 @@ app.use(express.urlencoded({ extended: false }));
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 // var insertData = require("./Model/RouteInsertModel")();
+var io = socketio();
+app.io = io;
+require("./socket-io/index")(io);
 app.use("/", authRouter);
+app.use("/busroute",busRoute)
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -38,7 +46,7 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
-  
+
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
@@ -46,5 +54,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({ status: "error", error: err.message });
 });
+
 
 module.exports = app;
