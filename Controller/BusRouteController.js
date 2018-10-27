@@ -1,4 +1,6 @@
 var BusRoute = require('../Model/BusRouteModel');
+var throwError = require("../ErrorHandler/Error");
+
 
 class BusRouteClass {
     static getRoute(id, res, next) {
@@ -18,10 +20,5 @@ class BusRouteClass {
         }
     }
 }
-function throwError(message, status, next) {
-    let err = new Error();
-    err.status = status;
-    err.message = message;
-    next(err);
-}
+
 module.exports = BusRouteClass;

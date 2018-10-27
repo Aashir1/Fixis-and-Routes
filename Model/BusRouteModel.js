@@ -4,12 +4,12 @@ const RouteSchema = new Schema({
     bus_name: {
         type: Schema.Types.String
     },
-    bus_route: {
-        
+    bus_route:{
+            
     }
 
 
-},);
+});
 const BusRoute = db.model("BusRoute", RouteSchema,"BusRoutes");
 
 

@@ -5,6 +5,7 @@ var saltRounds = 10;
 const jwt = require("jsonwebtoken");
 var validator = require('validator');
 const key = "fixs-and-routes";
+var throwError = require("../ErrorHandler/Error");
 class UserClass {
     static signUpUser(obj, res, next) {
         if (obj.email && obj.name && obj.pass) {
@@ -127,11 +128,5 @@ function ResolvePromise(dbOperator, res, next) {
 
 
     })
-}
-function throwError(message, status, next) {
-    let err = new Error();
-    err.status = status;
-    err.message = message;
-    next(err);
 }
 module.exports = UserClass;

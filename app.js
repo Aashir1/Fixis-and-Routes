@@ -11,6 +11,7 @@ var socketio = require('socket.io');
 
 var authRouter = require("./routes/Auth");
 var busRoute = require("./routes/BusRoute");
+var busInfo = require("./routes/BusInfo");
 
 var app = express();
 
@@ -31,7 +32,8 @@ var io = socketio();
 app.io = io;
 require("./socket-io/index")(io);
 app.use("/", authRouter);
-app.use("/busroute",busRoute)
+app.use("/busroute", busRoute);
+app.use("/businfo", busInfo);
 
 
 
