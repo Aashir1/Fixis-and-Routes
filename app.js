@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var socketio = require('socket.io');
+var LiveTrack = require("./routes/LiveTrack");
 
 
 // var indexRouter = require('./routes/index');
@@ -34,7 +35,7 @@ require("./socket-io/index")(io);
 app.use("/", authRouter);
 app.use("/busroute", busRoute);
 app.use("/businfo", busInfo);
-
+app.use("/livetracking",LiveTrack);
 
 
 // catch 404 and forward to error handler

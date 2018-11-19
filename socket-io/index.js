@@ -8,9 +8,9 @@ module.exports = function (io) {
         socket.on("message", (message) => {
             let json = JSON.parse(`{${message}}`);
             console.log("json", json);
-            io.emit("HU 02", json);
+            io.emit(json.bus_name, json);
         });
-        
+
         socket.on('disconnect', function () {
             console.log("disconnected", socket.id)
         });
