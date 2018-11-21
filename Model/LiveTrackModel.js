@@ -15,7 +15,7 @@ const LiveTrackSchema = new Schema({
     },
     date: {
         type: Schema.Types.Date,
-        default: Date.now()
+        default:new Date()
     }
 
 

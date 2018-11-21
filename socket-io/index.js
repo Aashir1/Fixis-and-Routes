@@ -1,3 +1,4 @@
+var LiveTrackController = require("../Controller/LiveTrackController");
 module.exports = function (io) {
     io.on('connection', (socket) => {
         console.log('A client just joined on', socket.id);
@@ -8,6 +9,7 @@ module.exports = function (io) {
         socket.on("message", (message) => {
             let json = JSON.parse(`{${message}}`);
             console.log("json", json);
+            LiveTrackController.addCurrLocation(json);
             io.emit(json.bus_name, json);
         });
 
