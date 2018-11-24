@@ -4,7 +4,7 @@ const validator = require('validator');
 const UserModel = require('../../Models/AuthModels/UserModel');
 var mongoose = require('mongoose');
 
-const salt = 20;
+const salt = 10;
 const secret = 'INSPIRON15R';
 
 class AuthController {
@@ -12,7 +12,8 @@ class AuthController {
         let { email, password } = req.body;
         if (validator.isEmail(email)) {
             let userDocument = new UserModel(req.body);
-            // userDocument.password = bcrypt.hashSync(userDocument.password, salt);
+            console.log('controller :::::::: ', req.body)
+            userDocument.password = bcrypt.hashSync(userDocument.password, salt);
             userDocument.save((err, user) => {
                 if (!err) {
                     delete user.password;
@@ -25,6 +26,7 @@ class AuthController {
                     }
                     return AuthController.throwError(res, error, 400);
                 }
+                return AuthController.throwError(res, {message: err.message}, 400);
             })
             // console.log("run till there 1");
             // bcrypt.hash(userDocument.password, salt, (err, hash) => {
@@ -44,6 +46,7 @@ class AuthController {
     }
 
     static signIn(req, res, next) {
+        console.log(req.body)
         let { email, password } = req.body;
         if (validator.isEmail(email)) {
             UserModel.findOne({ email }, (err, user) => {
@@ -51,7 +54,7 @@ class AuthController {
                     return AuthController.throwError(res, { message: `No user corresponding to the email ${email}` }, 404)
                 }
                 if (!err) {
-                    if (true || bcrypt.compareSync(password, user.password)) {
+                    if (bcrypt.compareSync(password, user.password)) {
                         delete user.password;
                         return AuthController.sendResponse(res, user);
                     } else {
@@ -66,6 +69,12 @@ class AuthController {
         }
     }
 
+    static signOut(req, res) {
+        return res.json({
+            status: 'success'
+        })
+    }
+
     static sendResponse(res, user) {
         let userObj = {
             firstName: user.firstName,
@@ -75,7 +84,7 @@ class AuthController {
             id: user._id,
             createdAt: user.createdAt
         }
-        jwt.sign(userObj, secret, (err, token) => {
+        jwt.sign(userObj, secret, { expiresIn: Math.floor(Date.now() / 1000) + (60 * 60) }, (err, token) => {
             if (!err) {
                 return res.json({
                     user: userObj,
@@ -88,8 +97,12 @@ class AuthController {
     }
 
     static throwError(res, errObj, statusCode = 400) {
-        errObj.status = statusCode;
-        return res.status(statusCode).json({ error: errObj })
+        let error = new Error();
+        error.code = errObj.code;
+        error.message = errObj.message;
+        // errObj.status = statusCode;
+        error.status = statusCode
+        return res.status(statusCode).json({ error })
     }
 }
 

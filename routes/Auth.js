@@ -12,8 +12,9 @@ router.post('/signup', (req, res, next) => {
 });
 
 
-router.post('/signIn', (req, res, next) => {
+router.post('/signin', (req, res, next) => {
     let { body } = req;
+    console.log(body, '*-*-*-*-*-*')
     if (!body.email || !body.password) {
         createError(body, res);
     } else {
@@ -21,6 +22,9 @@ router.post('/signIn', (req, res, next) => {
     }
 })
 
+router.post('/signout', (req, res, next) => {
+    AuthController.signOut(req, res);
+})
 
 function createError(obj, res) {
     let err = new Error();
