@@ -34,7 +34,7 @@ class LiveTrackClass {
                 }).catch(err => {
                     throwError(err.message, 500, next)
                 })
-            else {
+            else if (daylight == "evening") {
                 LiveTrack.find({ bus_name, date: { "$gte": new Date(dateArray[0], dateArray[1], dateArray[2], 11, 0), "$lte": new Date(dateArray[0], dateArray[1], dateArray[2], 14, 0) } }).then(value => {
                     res.json({ status: "success", value })
                 }).catch(err => {
