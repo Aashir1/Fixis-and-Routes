@@ -1,43 +1,12 @@
-let express = require('express');
-let router = express.Router();
-let AuthController = require('../Controller/AuthController/AuthController');
+var express = require('express');
+var router = express.Router();
+var AuthController = require("../Controller/AuthController");
 
-router.post('/signup', (req, res, next) => {
-    let { body } = req;
-    if (!body.email || !body.password || !body.firstName || !body.lastName || !body.name) {
-        createError(body, res);
-    } else {
-        AuthController.signUp(req, res);
-    }
-});
-
-
-router.post('/signin', (req, res, next) => {
-    let { body } = req;
-    console.log(body, '*-*-*-*-*-*')
-    if (!body.email || !body.password) {
-        createError(body, res);
-    } else {
-        AuthController.signIn(req, res);
-    }
+router.post("/signUp", (req, res, next) => {
+    AuthController.signUpUser(req.body, res, next)
+})
+router.post("/signIn", (req, res, next) => {
+    AuthController.signInUser(req.body, res, next)
 })
 
-router.post('/signout', (req, res, next) => {
-    AuthController.signOut(req, res);
-})
-
-function createError(obj, res) {
-    let err = new Error();
-    for (let i in obj) {
-        if (!obj[i].toString().trim()) {
-            console.log(`${i} is required`);
-            err.message = `${i} is required`;
-            err.status = 400;
-            break;
-        }
-    }
-    res.json(err);
-}
-
-
-module.exports = router;
+module.exports = router
