@@ -15,7 +15,7 @@ const UserSchema = new Schema({
         type: Schema.Types.String,
         required: [true, "email must be required"],
         unique: [true, "email already taken"],
-        
+
     },
     pass: {
         type: Schema.Types.String,
@@ -24,10 +24,39 @@ const UserSchema = new Schema({
             validator: (pass) => pass.length >= 8,
             message: 'password must be consist of 8 characters'
         }
+    },
+    userInfo: {
+        cmsId: {
+            type: Schema.Types.String,
+            required: [true, "user Id is required"],
+            unique: [true, 'id already taken by other user'],
+            validate: {
+                validator: (cmsId) => cmsId.length === 7,
+                message: "Id must be 7 character long"
+            }
+        },
+        userType: {
+            type: Schema.Types.String,
+            required: [true, "UserType is required"],
+            validate: {
+                validator: (userType) => userType.length >= 7,
+                message: "Wrong user type"
+            }
+        },
+        stopLocation: {
+            lat: {
+                type: Schema.Types.String,
+            },
+            lng: {
+                type: Schema.Types.String,
+            }
+        }
+
     }
+
 
 });
 const User = db.model("user", UserSchema);
 
 
-module.exports =User;
+module.exports = User;

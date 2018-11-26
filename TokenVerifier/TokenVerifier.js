@@ -6,6 +6,7 @@ module.exports = function verifyToken(req, res, next) {
     // Get auth header value
     // console.log("headers", req.headers)
     const bearerHeader = req.headers['authorization'];
+    console.log('bearerHeader: ', bearerHeader);
     // console.log("token", bearerHeader)
     // Check if bearer is undefined
     if (typeof bearerHeader !== 'undefined') {

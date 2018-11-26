@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var socketio = require('socket.io');
+var cors = require('cors');
+var socket = require('socket.io');
 var LiveTrack = require("./routes/LiveTrack");
 var LiveTrackCont = require("./Controller/LiveTrackController")
 
@@ -35,8 +36,6 @@ app.use(express.urlencoded({ extended: false }));
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 // var insertData = require("./Model/RouteInsertModel")();
-var io = socketio();
-app.io = io;
 require("./socket-io/index")(io);
 app.use("/", authRouter);
 app.use("/busroute", busRoute);
