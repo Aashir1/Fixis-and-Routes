@@ -15,6 +15,7 @@ var LiveTrackCont = require("./Controller/LiveTrackController")
 var authRouter = require("./routes/Auth");
 var busRoute = require("./routes/BusRoute");
 var busInfo = require("./routes/BusInfo");
+let busesroutes = require("./routes/BusesRoutes");
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use(express.urlencoded({ extended: false }));
 // var insertData = require("./Model/RouteInsertModel")();
 require("./socket-io/index")(io);
 app.use("/", authRouter);
+app.use("/busesroutes", busesroutes);
 app.use("/busroute", busRoute);
 app.use("/businfo", busInfo);
 app.post("/live", (req, res) => {
