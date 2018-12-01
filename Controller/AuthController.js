@@ -8,7 +8,7 @@ const key = "fixs-and-routes";
 var throwError = require("../ErrorHandler/Error");
 class UserClass {
     static signUpUser(obj, res, next) {
-        if (obj.email && obj.name && obj.pass) {
+        if (obj.email && obj.name && obj.pass && obj.userInfo) {
             if (!validator.isEmail(obj.email)) {
                 throwError("email address not properly formed", 400, next);
             }
@@ -26,7 +26,7 @@ class UserClass {
             }
             bcrypt.hash(obj.pass, saltRounds, (err, hash) => {
 
-                let user = new User({ name: obj.name, email: obj.email, pass: hash });
+                let user = new User({ name: obj.name, email: obj.email, pass: hash, userInfo: obj.userInfo });
 
 
                 ResolvePromise(user.save(), res, next)
@@ -40,8 +40,11 @@ class UserClass {
             } else if (!obj.name) {
                 throwError("name is required", 400, next)
             }
-            else {
+            else if (!obj.pass) {
                 throwError("password is required", 400, next);
+            }
+            else if (!obj.userInfo) {
+                throwError("userInfo is required", 400, next);
             }
         }
 
@@ -65,7 +68,7 @@ class UserClass {
                                 res.json({
                                     status: "success",
                                     token,
-                                    user: { name: value[0].name, email: value[0].email, _id: value[0]._id }
+                                    user: value[0]
                                 });
                             else
                                 throw err
@@ -89,6 +92,7 @@ class UserClass {
         }
 
     }
+
 }
 
 
@@ -124,7 +128,7 @@ function ResolvePromise(dbOperator, res, next) {
 
             throwError(err.message, err.status, next)
         }
-
+        throwError(err.message, 500, next)
 
 
     })
