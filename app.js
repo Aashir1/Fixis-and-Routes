@@ -6,7 +6,8 @@ var logger = require('morgan');
 var cors = require('cors');
 var socket = require('socket.io');
 var LiveTrack = require("./routes/LiveTrack");
-var LiveTrackCont = require("./Controller/LiveTrackController")
+var LiveTrackCont = require("./Controller/LiveTrackController");
+var changePasswordRouter = require("./routes/ChangePassword");
 
 
 // var indexRouter = require('./routes/index');
@@ -38,13 +39,14 @@ app.use(express.urlencoded({ extended: false }));
 // app.use('/users', usersRouter);
 // var insertData = require("./Model/RouteInsertModel")();
 require("./socket-io/index")(io);
+app.use("/", changePasswordRouter);
 app.use("/", authRouter);
 app.use("/busesroutes", busesroutes);
 app.use("/busroute", busRoute);
 app.use("/businfo", busInfo);
 app.post("/live", (req, res) => {
-  LiveTrackCont.addCurrLocation(req.body)
-})
+  LiveTrackCont.addCurrLocation(req.body);
+});
 app.use("/livetracking", LiveTrack);
 
 
