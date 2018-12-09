@@ -62,13 +62,13 @@ class UserClass {
                     if (bcryptRes) {
 
                         let user = value[0];
-
+                        user.pass = undefined;
                         jwt.sign({ name: value[0].name, email: value[0].email }, key, (err, token) => {
                             if (!err)
                                 res.json({
                                     status: "success",
                                     token,
-                                    user: value[0]
+                                    user: user
                                 });
                             else
                                 throw err
