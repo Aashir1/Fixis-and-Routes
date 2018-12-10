@@ -8,7 +8,20 @@ router.get("/:busname", verifyToken, (req, res, next) => {
     RouteController.getRoute(req.params.busname, res, next);
 })
 
+router.post('/add', verifyToken, (req, res, next) => {
+    console.log('at add bus route');
+    RouteController.addRoute(req, res, next);
+})
 
+router.post('/update', verifyToken, (req, res, next) => {
+    console.log('at update bus route', req.body);
+    RouteController.updateRoute(req, res, next);
+})
+
+router.post('/delete/:id', verifyToken, (req, res, next) => {
+    console.log("bus route controller");
+    RouteController.deleteRoute(req, res, next);
+})
 
 
 
