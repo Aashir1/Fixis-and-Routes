@@ -1,7 +1,7 @@
 var BusInfo = require('../Model/BusInfoModel');
 var throwError = require("../ErrorHandler/Error");
 class BusInfoClass {
-    static getInfo(page, res, next) {
+    static getInfoByPage(page, res, next) {
         var perPage = 10
         var page = page || 1;
         BusInfo.find({})
@@ -86,6 +86,15 @@ class BusInfoClass {
                 return throwError(error.message, 500, next);
             });
         }
+    }
+    static getAllInfo(res, next) {
+        BusInfo.find({}, (err, data) => {
+            if (!err) {
+                res.json({ status: "success", info: [...data] });
+            } else {
+                throwError(err.message, 500, next)
+            }
+        })
     }
 }
 

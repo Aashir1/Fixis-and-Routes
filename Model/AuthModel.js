@@ -31,7 +31,7 @@ const UserSchema = new Schema({
             required: [true, "user Id is required"],
             unique: [true, 'id already taken by other user'],
             validate: {
-                validator: (cmsId) => cmsId.length === 7,
+                validator: (cmsId) => cmsId.length >= 7,
                 message: "Id must be 7 character long"
             }
         },
@@ -45,11 +45,16 @@ const UserSchema = new Schema({
         },
         stopLocation: {
             lat: {
-                type: Schema.Types.String,
+                type: Schema.Types.Number,
             },
             lng: {
-                type: Schema.Types.String,
+                type: Schema.Types.Number,
             }
+        },
+        busName: {
+            type: Schema.Types.String,
+            required: [true, "busName is required"],
+
         }
 
     }

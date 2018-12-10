@@ -17,6 +17,7 @@ var authRouter = require("./routes/Auth");
 var busRoute = require("./routes/BusRoute");
 var busInfo = require("./routes/BusInfo");
 let busesroutes = require("./routes/BusesRoutes");
+var userUpdate = require("./routes/UserUpdate");
 
 var app = express();
 
@@ -48,6 +49,7 @@ app.post("/live", (req, res) => {
   LiveTrackCont.addCurrLocation(req.body);
 });
 app.use("/livetracking", LiveTrack);
+app.use("/userupdate", userUpdate);
 
 
 // catch 404 and forward to error handler
