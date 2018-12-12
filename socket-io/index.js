@@ -7,14 +7,14 @@ module.exports = function (io) {
         //     socket.emit("messages", message)
         // })
         socket.on("message", (message) => {
-            let json = JSON.parse(`{${message}}`);
-            console.log("json", json);
-            LiveTrackController.addCurrLocation(json);
-            io.emit(json.bus_name, json);
+            // let json = JSON.parse(`{${message}}`);
+            // console.log("json", json);
+            LiveTrackController.addCurrLocation(message);
+            io.emit(json.bus_name, message);
         });
 
         socket.on('disconnect', function () {
-            console.log("disconnected", socket.id)
+            console.log("disconnected", socket.id);
         });
     });
 }
