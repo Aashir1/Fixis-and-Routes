@@ -7,7 +7,7 @@ router.get("/all", verifyToken, (req, res, next) => {
     InfoController.getAllInfo(res, next);
 })
 router.get("/:page?", verifyToken, (req, res, next) => {
-    InfoController.getInfo(req.query.page, res, next)
+    InfoController.getInfoByPage(req.query.page, res, next)
 });
 
 

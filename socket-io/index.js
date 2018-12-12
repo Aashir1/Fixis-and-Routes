@@ -17,10 +17,10 @@ module.exports = function (io) {
             try {
                 // let json = JSON.parse(`{${message}}`);
                 // console.log("json", json);
-                // LiveTrackController.addCurrLocation(json);
                 if (message.lng > 0 && message.lat > 0 && message.date && message.time) {
                     console.log("inside if of message")
-                    // io.emit(message.bus_name, message);
+                    io.emit(message.bus_name, message);
+                    // LiveTrackController.addCurrLocation(message);
                     AuthModel.find({}, (err, res) => {
                         if (!err) {
                             users = [...res];
