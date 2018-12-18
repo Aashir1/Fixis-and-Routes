@@ -2,12 +2,12 @@ var LiveTrack = require('../Model/LiveTrackModel');
 var throwError = require("../ErrorHandler/Error");
 
 class LiveTrackClass {
-    static addCurrLocation(info) {
+    static addCurrLocation(info, res, next) {
         let liveTrack = new LiveTrack(info);
         liveTrack.save().then((value) => {
-            console.log(value);
+            res.json({ status: "success", info })
         }).catch(err => {
-            console.log(err);
+            throwError(err.message, 500, next)
         })
     }
     static getCurrLocation(req, res, next) {

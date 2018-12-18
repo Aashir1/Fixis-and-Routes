@@ -45,8 +45,9 @@ app.use("/", authRouter);
 app.use("/busesroutes", busesroutes);
 app.use("/busroute", busRoute);
 app.use("/businfo", busInfo);
-app.post("/live", (req, res) => {
-  LiveTrackCont.addCurrLocation(req.body);
+app.post("/live", (req, res, next) => {
+  LiveTrackCont.addCurrLocation(req.body, res, next);
+  io.sockets.emit(req.body.bus_name, req.body)
 });
 app.use("/livetracking", LiveTrack);
 app.use("/userupdate", userUpdate);
