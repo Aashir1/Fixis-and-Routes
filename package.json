@@ -1,6 +1,10 @@
 {
   "name": "fixisandroutes",
   "version": "0.0.0",
+  "engines": {
+    "node": "10.13.0",
+    "npm":"6.4.1"
+  },
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www"
@@ -21,8 +25,6 @@
     "request": "^2.88.0",
     "socket.io": "^2.1.1",
     "validator": "^10.8.0"
-  },
-  "engines": {
-    "node": "10.13.0"
   }
+  
 }
