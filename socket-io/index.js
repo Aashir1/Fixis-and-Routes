@@ -44,7 +44,7 @@ module.exports = function (io) {
         });
 
         socket.on('disconnect', function () {
-            console.log("disconnected", socket.id)
+            console.log("disconnected", socket.id);
         });
     });
 }
