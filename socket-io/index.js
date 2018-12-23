@@ -31,13 +31,12 @@ module.exports = function (io) {
                             for (let i = 0; i < res.length; i++) {
                                 console.log(users[i], "distance: ", distance(message.lat, message.lng, res[i].userInfo.stopLocation.lat, res[i].userInfo.stopLocation.lng))
                                 if (distance(message.lat, message.lng, res[i].userInfo.stopLocation.lat, res[i].userInfo.stopLocation.lng) <= radius) {
-                                    request.post(`https://routes-fyp.firebaseio.com/notification/${res[i]._id}.json`, { json: true, body: { title: "Get Ready!", message: "Bus is arriving" } }, )
+                                    request.post(`https://routes-fyp.firebaseio.com/notification/${res[i]._id}.json`, { json: true, body: { title: "Get Ready!", message: "Bus is arriving" } })
                                 }
                             }
                         }
                     });
                 }
-
             } catch (e) {
                 console.log(e.message)
             }
@@ -48,7 +47,7 @@ module.exports = function (io) {
         });
     });
 }
-function distance(lat1, lon1, lat2, lon2, unit) {
+function distance(lat1, lon1, lat2, lon2, unit = 'K') {
     if ((lat1 == lat2) && (lon1 == lon2)) {
         return 0;
     }
