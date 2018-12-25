@@ -22,13 +22,14 @@ class BusRouteClass {
     }
 
     static addRoute(req, res, next) {
-        let { busName, route } = req.body;
-        if (!busName && !route) {
+        let { busName, wayPoint,route } = req.body;
+        if (!busName && !route && wayPoint.length === 10) {
             return throwError("invalid body", 422, next);
         } else {
             let busRouteDoc = new BusRoute({
                 bus_name: busName,
-                bus_route: route
+                bus_route: route,
+                wayPoint: wayPoint
             });
             busRouteDoc.save((error, doc) => {
                 if (!error) {
