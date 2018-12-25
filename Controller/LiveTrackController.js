@@ -2,7 +2,7 @@ var LiveTrack = require('../Model/LiveTrackModel');
 var throwError = require("../ErrorHandler/Error");
 var AuthModel = require("../Model/AuthModel");
 var request = require("request");
-
+const radius = 0.3;
 
 class LiveTrackClass {
     static addCurrLocation(info, res, next) {
@@ -56,7 +56,7 @@ class LiveTrackClass {
             if (info.lng > 0 && info.lat > 0 && info.date && info.time) {
                 const distance1 = distance(25.083326, 67.012554, info.lat, info.lng);//for hu alert
                 const distance2 = distance(25.074447, 67.013600, info.lat, info.lng);//for nothrenbypass alert
-                if (distance1 <= 0.02880746058673089 || distance2 <= 0.02880746058673089) {
+                if (distance1 <= radius || distance2 <= radius) {
                     console.log('send web notification');
                 }
                 console.log("inside if of message")
