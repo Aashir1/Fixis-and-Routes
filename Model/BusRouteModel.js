@@ -15,11 +15,7 @@ const RouteSchema = new Schema({
     },
     wayPoint: {
         type: Schema.Types.Array,
-        required: [true, "waypoints are required"],
-        validate: {
-            validator: (wayPoint) => wayPoint.length == 10,
-            message: 'WayPoints must be contain 10 elements'
-        }
+        required: [true, "waypoints are required"]
     }
 });
 const BusRoute = db.model("BusRoute", RouteSchema, "BusRoutes");
