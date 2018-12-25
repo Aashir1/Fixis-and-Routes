@@ -22,7 +22,8 @@ class BusRouteClass {
     }
 
     static addRoute(req, res, next) {
-        let { busName, wayPoint,route } = req.body;
+        let { busName, wayPoint, route } = req.body;
+        console.log("incomming data from client1: ", req.body);
         if (!busName && !route && wayPoint.length === 10) {
             return throwError("invalid body", 422, next);
         } else {
@@ -32,6 +33,7 @@ class BusRouteClass {
                 wayPoint: wayPoint
             });
             busRouteDoc.save((error, doc) => {
+                console.log("incomming saved data from client2: ", doc);
                 if (!error) {
                     return res.json({ status: 'success', data: doc });
                 }
@@ -55,13 +57,14 @@ class BusRouteClass {
     }
 
     static updateRoute(req, res, next) {
-        let { busName, route, id } = req.body;
-        if (!busName || !route || !id) {
+        let { busName, wayPoint, route, id } = req.body;
+        if (!busName || !route || !id || wayPoint.length !== 10) {
             return throwError("invalid request", 422, next);
         } else {
             let updateObj = {
                 bus_name: busName,
-                bus_route: route
+                bus_route: route,
+                wayPoint: wayPoint
             }
             BusRoute.findOneAndUpdate({ _id: id }, updateObj, { new: true }, (error, doc) => {
                 if (!error && doc) {

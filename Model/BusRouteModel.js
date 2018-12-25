@@ -13,10 +13,7 @@ const RouteSchema = new Schema({
         type: Schema.Types.String,
         required: [true, "bus route is required"]
     },
-    wayPoint: {
-        type: Schema.Types.Array,
-        required: [true, "waypoints are required"]
-    }
+    wayPoint: []
 });
 const BusRoute = db.model("BusRoute", RouteSchema, "BusRoutes");
 
