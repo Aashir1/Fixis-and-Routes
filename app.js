@@ -50,7 +50,6 @@ app.post('/live', (req, res, next) => {
   LiveTrackCont.addCurrLocation(req.body, res, next);
   LiveTrackCont.sendNotification(req.body);
   io.sockets.emit(req.body.bus_name, req.body);
-
 })
 app.use("/livetracking", LiveTrack);
 app.use("/userupdate", userUpdate);

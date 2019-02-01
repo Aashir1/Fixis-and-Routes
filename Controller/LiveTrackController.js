@@ -12,7 +12,7 @@ class LiveTrackClass {
                 res.json({ status: 'success', data: doc })
             })
             .catch(error => {
-                throwError(err.message, 500, next)
+                throwError(error.message, 500, next)
             })
     }
     static getCurrLocation(req, res, next) {

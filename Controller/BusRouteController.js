@@ -9,7 +9,7 @@ class BusRouteClass {
             BusRoute.find({ "bus_name": name }).then(value => {
                 console.log('value: ', value);
                 if (value[0])
-                    res.json({ status: "success", route: value[0].bus_route, _id: value[0]._id, bus_name: value[0].bus_name })
+                    res.json({ status: "success", route: value[0].bus_route, _id: value[0]._id, bus_name: value[0].bus_name,wayPoint:value[0].wayPoint })
                 else {
                     throwError("no record found", 404, next)
                 }
