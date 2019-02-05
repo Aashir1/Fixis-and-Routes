@@ -8,6 +8,7 @@ var socket = require('socket.io');
 var LiveTrack = require("./routes/LiveTrack");
 var LiveTrackCont = require("./Controller/LiveTrackController");
 var changePasswordRouter = require("./routes/ChangePassword");
+var AttendanceController = require("./Controller/AttendanceController");
 
 
 // var indexRouter = require('./routes/index');
@@ -50,6 +51,10 @@ app.post('/live', (req, res, next) => {
   LiveTrackCont.addCurrLocation(req.body, res, next);
   LiveTrackCont.sendNotification(req.body);
   io.sockets.emit(req.body.bus_name, req.body);
+});
+app.post('/attendance', (req, res, next) => {
+
+  AttendanceController.addAttendance(req, res, next,io);
 })
 app.use("/livetracking", LiveTrack);
 app.use("/userupdate", userUpdate);
