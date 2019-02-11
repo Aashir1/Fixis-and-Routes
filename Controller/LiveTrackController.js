@@ -53,18 +53,18 @@ class LiveTrackClass {
         try {
             // let json = JSON.parse(`{${message}}`);
             // console.log("json", json);
-            if (info.lng > 0 && info.lat > 0 && info.date && info.time) {
+            if (info.lng > 0 && info.lat > 0 ) {
                 const distance1 = distance(25.083326, 67.012554, info.lat, info.lng);//for hu alert
                 const distance2 = distance(25.074447, 67.013600, info.lat, info.lng);//for nothrenbypass alert
                 if (distance1 <= radius || distance2 <= radius) {
                     console.log('send web notification');
                 }
                 console.log("inside if of message")
-                io.emit(info.bus_name, info);
+                // io.emit(info.bus_name, info);
                 // LiveTrackController.addCurrLocation(message);
                 AuthModel.find({}, (err, res) => {
                     if (!err) {
-                        users = [...res];
+                       let users = [...res];
                         // console.log(res.length);
                         // for (let i = 0; i < res.length; i++) {
                         //     console.log("users:", users[i].userInfo)
@@ -72,6 +72,7 @@ class LiveTrackClass {
                         for (let i = 0; i < res.length; i++) {
                             console.log(users[i], "distance: ", distance(info.lat, info.lng, res[i].userInfo.stopLocation.lat, res[i].userInfo.stopLocation.lng))
                             if (distance(info.lat, info.lng, res[i].userInfo.stopLocation.lat, res[i].userInfo.stopLocation.lng) <= radius) {
+                                console.log("inside if",`https://routes-fyp.firebaseio.com/notification/${res[i]._id}.json`)
                                 request.post(`https://routes-fyp.firebaseio.com/notification/${res[i]._id}.json`, { json: true, body: { title: "Get Ready!", message: "Bus is arriving" } })
                             }
                         }
